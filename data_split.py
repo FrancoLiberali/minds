@@ -1,3 +1,4 @@
+import pandas as pd
 import numpy as np
 import pickle
 import socket
@@ -6,7 +7,7 @@ import struct
 # Split the dataset into training and test sets
 
 
-def dataSplit(file3, file4, file5, file7, file11, file12, file13, testFile):
+def data_split(file3, file4, file5, file7, file11, file12, file13, testFile):
     files = [file3, file4, file5, file7, file11, file12, file13]
     data = data2 = ""
     for file in files:
@@ -126,12 +127,32 @@ def dataSplit(file3, file4, file5, file7, file11, file12, file13, testFile):
     return np.array(x), np.array(y), np.array(xT), np.array(yT)
 
 
-if __name__ == "__main__":
-    dataSplit(r"/content/drive/MyDrive/Files/3.binetflow",
-              r"/content/drive/MyDrive/Files/4.binetflow",
-              r"/content/drive/MyDrive/Files/5.binetflow",
-              r"/content/drive/MyDrive/Files/7.binetflow",
-              r"/content/drive/MyDrive/Files/11.binetflow",
-              r"/content/drive/MyDrive/Files/12.binetflow",
-              r"/content/drive/MyDrive/Files/13.binetflow",
-              r"/content/drive/MyDrive/Files/1.binetflow")
+TRAINING_SCENARIOS = [3, 4, 5, 7, 10, 11, 12, 13]
+TEST_SCENARIOS = [1, 2, 6, 8, 9]
+
+
+def concat_files(file_name, file_name_list):
+    full_training_file = pd.DataFrame()
+
+    for file_name in file_name_list:
+        scenario = pd.read_csv(file_name, usecols=[
+            'SrcAddr', 'DstAddr', 'Sport', 'Dport', 'Label'])
+
+        # keep only flows with label Normal and Background
+        scenario[scenario['Label'].str.contains(
+            "Background") | scenario['Label'].str.contains("Normal")]
+
+        full_training_file = pd.concat(
+            [full_training_file, scenario[['SrcAddr', 'DstAddr', 'Sport', 'Dport']]], ignore_index=True)
+        del scenario
+
+    full_training_file.to_csv(file_name)
+    return full_training_file
+
+
+def data_split_2format():
+    concat_files("training_file.binetflow", [
+                 f"{file_number}.binetflow.2format" for file_number in TRAINING_SCENARIOS])
+
+
+data_split_2format()
