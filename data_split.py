@@ -21,12 +21,6 @@ def ip_to_int(ip):
             return None
 
 
-def label_to_intrusion(label):
-    if "Background" in label or "Normal" in label:
-        return common.NOT_INTRUSION
-    return common.INTRUSION
-
-
 def concat_files(output_file_name, file_name_list, filter_botnet, columns_to_keep):
     concat_df = pd.DataFrame()
 
@@ -40,12 +34,8 @@ def concat_files(output_file_name, file_name_list, filter_botnet, columns_to_kee
         if filter_botnet:
             # keep only flows with label Normal and Background
             scenario = scenario[
-                scenario[LABEL_COLUMN].str.contains(
-                    "Background") | scenario[LABEL_COLUMN].str.contains("Normal")
+                common.get_normal_and_background_indexes(scenario)
             ]
-        else:
-            scenario[LABEL_COLUMN] = scenario[
-                LABEL_COLUMN].apply(label_to_intrusion)
 
         # map ip address to int
         scenario['SrcAddr'] = scenario[
@@ -69,21 +59,23 @@ def concat_files(output_file_name, file_name_list, filter_botnet, columns_to_kee
 
 
 def data_split_2format():
-    # print("Creating training file")
-    # concat_files(
-    #     "training_file.binetflow",
-    #     [f"{file_number}.binetflow.2format" for file_number in TRAINING_SCENARIOS],
-    #     True,
-    #     TRAINING_COLUMNS,
-    # )
+    print("Creating training file")
+    training_df = concat_files(
+        "training_file.binetflow",
+        [f"{file_number}.binetflow.2format" for file_number in TRAINING_SCENARIOS],
+        True,
+        TRAINING_COLUMNS,
+    )
 
     print("Creating test file")
-    concat_files(
+    testing_df = concat_files(
         "test_file.binetflow",
         [f"{file_number}.binetflow.2format" for file_number in TEST_SCENARIOS],
         False,
         TESTING_COLUMNS,
     )
+
+    return training_df, testing_df
 
 
 if __name__ == "__main__":

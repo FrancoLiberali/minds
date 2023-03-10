@@ -4,42 +4,52 @@ import pandas as pd
 import common
 
 INTRUSION_THRESHOLD = -1
+INTRUSION = 'Y'
+NOT_INTRUSION = 'N'
+NEW_COLUMN_HEADER = f"IMT_MINDS ({NOT_INTRUSION}:{INTRUSION})"
 
-model = train_model.train_model("training_file_2.binetflow")
 
-test_cases = np.genfromtxt(
-    "test_file_2.binetflow",
-    delimiter=',',
-    skip_header=True,
-    usecols=(0, 1, 2, 3)
-)
+def evaluate_model():
+    model = train_model.train_model("training_file_2.binetflow")
 
-predictions = model.predict(test_cases)
-predictions = [common.INTRUSION if prediction <=
-               INTRUSION_THRESHOLD else common.NOT_INTRUSION for prediction in predictions]
+    test_cases = np.genfromtxt(
+        "test_file_2.binetflow",
+        delimiter=',',
+        skip_header=True,
+        usecols=(0, 1, 2, 3)
+    )
 
-intrusion_amount = predictions.count(common.INTRUSION)
-print(f"Found {intrusion_amount} intrusions")
+    predictions = model.predict(test_cases)
+    predictions = [INTRUSION if prediction <=
+                   INTRUSION_THRESHOLD else NOT_INTRUSION for prediction in predictions]
 
-del test_cases
+    intrusion_amount = predictions.count(INTRUSION)
+    print(f"Found {intrusion_amount} intrusions")
 
-df = pd.read_csv("test_file_2.binetflow")
-df["Intrusion prediction"] = predictions
+    del test_cases
 
-df.to_csv("test_predictions.csv", index=False)
+    df = pd.read_csv("test_file_2.binetflow")
+    df[NEW_COLUMN_HEADER] = predictions
 
-TN_amount = len(df[(df["Label"] == common.NOT_INTRUSION) &
-                (df["Intrusion prediction"] == common.NOT_INTRUSION)])
-TP_amount = len(df[(df["Label"] == common.INTRUSION) &
-                (df["Intrusion prediction"] == common.INTRUSION)])
-FP_amount = len(df[(df["Label"] == common.NOT_INTRUSION) &
-                (df["Intrusion prediction"] == common.INTRUSION)])
-FN_amount = len(df[(df["Label"] == common.INTRUSION) &
-                (df["Intrusion prediction"] == common.NOT_INTRUSION)])
+    df.to_csv("test_predictions.csv", index=False)
 
-total_amount = len(df)
+    return df
 
-print(f"TP: {TP_amount} / {total_amount}")
-print(f"TN: {TN_amount} / {total_amount}")
-print(f"FP: {FP_amount} / {total_amount}")
-print(f"FN: {FN_amount} / {total_amount}")
+
+if __name__ == "__main__":
+    df = evaluate_model()
+
+    is_normal_or_background = common.get_normal_and_background_indexes(df)
+    is_predicted_intrusion = df[NEW_COLUMN_HEADER] == INTRUSION
+
+    TN_amount = len(df[is_normal_or_background & ~is_predicted_intrusion])
+    TP_amount = len(df[~is_normal_or_background & is_predicted_intrusion])
+    FP_amount = len(df[is_normal_or_background & is_predicted_intrusion])
+    FN_amount = len(df[~is_normal_or_background & ~is_predicted_intrusion])
+
+    total_amount = len(df)
+
+    print(f"TP: {TP_amount} / {total_amount}")
+    print(f"TN: {TN_amount} / {total_amount}")
+    print(f"FP: {FP_amount} / {total_amount}")
+    print(f"FN: {FN_amount} / {total_amount}")

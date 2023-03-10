@@ -6,8 +6,6 @@ LOF_N_NEIGHBORS = 5
 
 
 def train_model(training_file_name, save_model=False):
-    # TODO aca estoy perdiendo apreciacion
-    # quizas porque son floats, no se
     training_cases = np.genfromtxt(
         training_file_name,
         delimiter=',',
