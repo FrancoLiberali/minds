@@ -9,11 +9,11 @@ NOT_INTRUSION = 'N'
 NEW_COLUMN_HEADER = f"IMT_MINDS ({NOT_INTRUSION}:{INTRUSION})"
 
 
-def evaluate_model():
-    model = train_model.train_model("training_file_2.binetflow")
+def evaluate_model(training_file_path, test_file_path):
+    model = train_model.train_model(training_file_path)
 
     test_cases = np.genfromtxt(
-        "test_file_2.binetflow",
+        test_file_path,
         delimiter=',',
         skip_header=True,
         usecols=(0, 1, 2, 3)
@@ -28,7 +28,7 @@ def evaluate_model():
 
     del test_cases
 
-    df = pd.read_csv("test_file_2.binetflow")
+    df = pd.read_csv(test_file_path)
     df[NEW_COLUMN_HEADER] = predictions
 
     # add columns required by BotnetDetectorsComparer but that are not really used
@@ -45,8 +45,8 @@ def evaluate_model():
     return df
 
 
-if __name__ == "__main__":
-    df = evaluate_model()
+def evaluate_model_and_print(training_file_path, test_file_path):
+    df = evaluate_model(training_file_path, test_file_path)
 
     is_normal_or_background = common.get_normal_and_background_indexes(df)
     is_predicted_intrusion = df[NEW_COLUMN_HEADER] == INTRUSION
@@ -62,3 +62,8 @@ if __name__ == "__main__":
     print(f"TN: {TN_amount} / {total_amount}")
     print(f"FP: {FP_amount} / {total_amount}")
     print(f"FN: {FN_amount} / {total_amount}")
+
+
+if __name__ == "__main__":
+    evaluate_model_and_print(
+        "training_file_2.binetflow", "test_file_2.binetflow")
