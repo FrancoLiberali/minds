@@ -94,50 +94,50 @@ plot_file = ''
 
 # Print version information and exit
 def version():
-    print "+----------------------------------------------------------------------+"
-    print "| statisticsGenerator.py Version "+ vernum +"                                   |"
-    print "| This program is free software; you can redistribute it and/or modify |"
-    print "| it under the terms of the GNU General Public License as published by |"
-    print "| the Free Software Foundation; either version 2 of the License, or    |"
-    print "| (at your option) any later version.                                  |"
-    print "|                                                                      |"
-    print "| Author: Garcia Sebastian, sebastiangarcia@conicet.gov.ar             |"
-    print "| Author: Martin Grill, grillmartin@gmail.com                          |"
-    print "| Author: Jan Stiborek, honza.stiborek@gmail.com                       |"
-    print "| UNICEN-ISISTAN, Argentina. CTU, Prague-ATG                           |"
-    print "+----------------------------------------------------------------------+"
-    print
+    print("+----------------------------------------------------------------------+")
+    print("| statisticsGenerator.py Version "+ vernum +"                                   |")
+    print("| This program is free software; you can redistribute it and/or modify |")
+    print("| it under the terms of the GNU General Public License as published by |")
+    print("| the Free Software Foundation; either version 2 of the License, or    |")
+    print("| (at your option) any later version.                                  |")
+    print("|                                                                      |")
+    print("| Author: Garcia Sebastian, sebastiangarcia@conicet.gov.ar             |")
+    print("| Author: Martin Grill, grillmartin@gmail.com                          |")
+    print("| Author: Jan Stiborek, honza.stiborek@gmail.com                       |")
+    print("| UNICEN-ISISTAN, Argentina. CTU, Prague-ATG                           |")
+    print("+----------------------------------------------------------------------+")
+    print()
 
 
 # Print help information and exit:
 def usage():
-    print "+----------------------------------------------------------------------+"
-    print "| statisticsGenerator.py Version "+ vernum +"                                   |"
-    print "| This program is free software; you can redistribute it and/or modify |"
-    print "| it under the terms of the GNU General Public License as published by |"
-    print "| the Free Software Foundation; either version 2 of the License, or    |"
-    print "| (at your option) any later version.                                  |"
-    print "|                                                                      |"
-    print "| Author: Garcia Sebastian, eldraco@gmail.com                          |"
-    print "| Author: Martin Grill, grillmartin@gmail.com                          |"
-    print "| Author: Jan Stiborek, honza.stiborek@gmail.com                       |"
-    print "| UNICEN-ISISTAN, Argentina. CTU, Prague-ATG                           |"
-    print "+----------------------------------------------------------------------+"
-    print "\nusage: %s <options>" % sys.argv[0]
-    print "options:"
-    print "  -h, --help           Show this help message and exit"
-    print "  -V, --version        Output version information and exit"
-    print "  -v, --verbose        Output more information."
-    print "  -D, --debug          Debug. In debug mode the statistics run live."
-    print "  -f, --file           SORTED input netflow labeled file to analyze (Netflow or Argus)."
-    print "  -t, --type           Type of comparison. Flow based (-t flow), time based (-t time), or weighted (-t weight)."
-    print "  -T, --time           While using time based comparison, specify the time window to use in secodns. E.g. -T 120"
-    print "  -p, --plot           Plot the fmeasures of all methods."
-    print "  -a, --alpha          In weight mode, use this alpha for computing the score (defaults to 0.4)."
-    print "  -c, --cvs            Print the final scores in cvs format into the specified file. E.g. -c results.csv"
-    print "  -o, --out            Store in a log file everything that is shown in the screen. -o all-info.txt"
-    print "  -P, --plot-to-file   Instead of showing the plot on the screen, store it in a file. Type of plot given by the file extension. E.g. -P all-info.eps"
-    print
+    print("+----------------------------------------------------------------------+")
+    print("| statisticsGenerator.py Version "+ vernum +"                                   |")
+    print("| This program is free software; you can redistribute it and/or modify |")
+    print("| it under the terms of the GNU General Public License as published by |")
+    print("| the Free Software Foundation; either version 2 of the License, or    |")
+    print("| (at your option) any later version.                                  |")
+    print("|                                                                      |")
+    print("| Author: Garcia Sebastian, eldraco@gmail.com                          |")
+    print("| Author: Martin Grill, grillmartin@gmail.com                          |")
+    print("| Author: Jan Stiborek, honza.stiborek@gmail.com                       |")
+    print("| UNICEN-ISISTAN, Argentina. CTU, Prague-ATG                           |")
+    print("+----------------------------------------------------------------------+")
+    print("\nusage: %s <options>" % sys.argv[0])
+    print("options:")
+    print("  -h, --help           Show this help message and exit")
+    print("  -V, --version        Output version information and exit")
+    print("  -v, --verbose        Output more information.")
+    print("  -D, --debug          Debug. In debug mode the statistics run live.")
+    print("  -f, --file           SORTED input netflow labeled file to analyze (Netflow or Argus).")
+    print("  -t, --type           Type of comparison. Flow based (-t flow), time based (-t time), or weighted (-t weight).")
+    print("  -T, --time           While using time based comparison, specify the time window to use in secodns. E.g. -T 120")
+    print("  -p, --plot           Plot the fmeasures of all methods.")
+    print("  -a, --alpha          In weight mode, use this alpha for computing the score (defaults to 0.4).")
+    print("  -c, --cvs            Print the final scores in cvs format into the specified file. E.g. -c results.csv")
+    print("  -o, --out            Store in a log file everything that is shown in the screen. -o all-info.txt")
+    print("  -P, --plot-to-file   Instead of showing the plot on the screen, store it in a file. Type of plot given by the file extension. E.g. -P all-info.eps")
+    print()
     sys.exit(1)
 
 
@@ -203,7 +203,7 @@ class time_windows():
         """ Get an ip and the real label. Check if the ip is new in this time window. Store the label. If it is new, initializate the label for each algorithm"""
         global debug
         try:
-            if self.ip_original_labels.has_key(ip):
+            if ip in self.ip_original_labels:
                 # We have already seen this ip
                 #if debug:
                     #print ' > We have already seen this ip: {0}'.format(ip)
@@ -212,7 +212,7 @@ class time_windows():
                 if self.ip_original_labels[ip] != label:
                     if 'background' in self.ip_original_labels[ip].lower() and 'botnet' in label.lower():
                         if debug:
-                            print '\nThe label for this IP has changed in the same time window from {0} to {1}!'.format(self.ip_original_labels[ip], label)
+                            print('\nThe label for this IP has changed in the same time window from {0} to {1}!'.format(self.ip_original_labels[ip], label))
                         # Decrease the amount of ips for the previous label
                         self.amount_of_unique_ips[self.ip_original_labels[ip]] -= 1
                         # Increase the amount of ips for the new label
@@ -225,7 +225,7 @@ class time_windows():
 
                     elif 'normal' in self.ip_original_labels[ip].lower() and 'botnet' in label.lower(): 
                         if debug:
-                            print '\nThe label for this IP has changed in the same time window from {0} to {1}!!'.format(self.ip_original_labels[ip], label)
+                            print('\nThe label for this IP has changed in the same time window from {0} to {1}!!'.format(self.ip_original_labels[ip], label))
                         # Decrease the amount of ips for the previous label
                         self.amount_of_unique_ips[self.ip_original_labels[ip]] -= 1
                         # Increase the amount of ips for the new label
@@ -237,7 +237,7 @@ class time_windows():
                         self.ip_original_labels[ip] = label
                     elif 'background' in self.ip_original_labels[ip].lower() and 'normal' in label.lower() and 'from' in label.lower(): 
                         if debug:
-                            print '\nThe label for this IP has changed in the same time window from {0} to {1}!!!'.format(self.ip_original_labels[ip], label)
+                            print('\nThe label for this IP has changed in the same time window from {0} to {1}!!!'.format(self.ip_original_labels[ip], label))
                         # Decrease the amount of ips for the previous label
                         self.amount_of_unique_ips[self.ip_original_labels[ip]] -= 1
                         # Increase the amount of ips for the new label
@@ -249,7 +249,7 @@ class time_windows():
                         self.ip_original_labels[ip] = label
                     elif 'botnet' in self.ip_original_labels[ip].lower() and 'cc' not in self.ip_original_labels[ip].lower() and 'cc' in label.lower(): 
                         if debug:
-                            print '\nThe label for this IP has changed in the same time window from {0} to {1}!!!!'.format(self.ip_original_labels[ip], label)
+                            print('\nThe label for this IP has changed in the same time window from {0} to {1}!!!!'.format(self.ip_original_labels[ip], label))
                         # Decrease the amount of ips for the previous label
                         self.amount_of_unique_ips[self.ip_original_labels[ip]] -= 1
                         # Increase the amount of ips for the new label
@@ -272,7 +272,7 @@ class time_windows():
                         if self.algorithms_dict[alg].algorithm_labels[1] not in self.algorithms_dict[alg].ip_labels[ip] and self.algorithms_dict[alg].algorithm_labels[1] in self.algorithms_dict[alg].ip_current_labels[ip]:
                             # Yes. We should change the previous predicted label to the new predicted label
                             if debug:
-                                print ' > In alg {0}, for ip {1} the label changed from {2} to {3}.'.format(self.algorithms_dict[alg].name, ip, self.algorithms_dict[alg].ip_labels[ip], self.algorithms_dict[alg].ip_current_labels[ip])
+                                print(' > In alg {0}, for ip {1} the label changed from {2} to {3}.'.format(self.algorithms_dict[alg].name, ip, self.algorithms_dict[alg].ip_labels[ip], self.algorithms_dict[alg].ip_current_labels[ip]))
 
                             self.algorithms_dict[alg].ip_labels[ip] = self.algorithms_dict[alg].ip_current_labels[ip]
 
@@ -307,13 +307,13 @@ class time_windows():
 
         except Exception as inst:
             if debug:
-                print 'Some problem in add_ip_label() method of class time_window'
-            print type(inst)     # the exception instance
-            print inst.args      # arguments stored in .args
-            print inst           # __str__ allows args to printed directly
+                print('Some problem in add_ip_label() method of class time_window')
+            print(type(inst))     # the exception instance
+            print(inst.args)      # arguments stored in .args
+            print(inst)           # __str__ allows args to printed directly
             x, y = inst          # __getitem__ allows args to be unpacked directly
-            print 'x =', x
-            print 'y =', y
+            print('x =', x)
+            print('y =', y)
             exit(-1)
 
 
@@ -329,16 +329,16 @@ class time_windows():
             try:
                 import scipy
             except ImportError:
-                print "WARNING! You don't have python-scipy installed. apt-get install python-scipy"
+                print("WARNING! You don't have python-scipy installed. apt-get install python-scipy")
                 exit (-1)
 
             if debug:
-                print '\n > Compute weighted errors'
+                print('\n > Compute weighted errors')
 
             correcting_function = scipy.exp( -alpha * ( self.id + first_sum ) ) + second_sum
 
             if debug:
-                print ' > Correcting function for time window {0}: {1}'.format(self.id, correcting_function)
+                print(' > Correcting function for time window {0}: {1}'.format(self.id, correcting_function))
                 #for alg in self.algorithms_dict:
                     #print alg
                     #print '\t Ip labels: {0}'.format(self.algorithms_dict[alg].ip_labels)
@@ -353,13 +353,13 @@ class time_windows():
 
         except Exception as inst:
             if debug:
-                print 'Some problem in compute_weighted_errors() method of class time_window'
-            print type(inst)     # the exception instance
-            print inst.args      # arguments stored in .args
-            print inst           # __str__ allows args to printed directly
+                print('Some problem in compute_weighted_errors() method of class time_window')
+            print(type(inst))     # the exception instance
+            print(inst.args)      # arguments stored in .args
+            print(inst)           # __str__ allows args to printed directly
             x, y = inst          # __getitem__ allows args to be unpacked directly
-            print 'x =', x
-            print 'y =', y
+            print('x =', x)
+            print('y =', y)
             exit(-1)
 
 
@@ -370,7 +370,7 @@ class time_windows():
 
         try:
             if debug or verbose:
-                print '\nRunning metrics...'
+                print('\nRunning metrics...')
             for alg in self.algorithms_dict:
                 # for each algorithm
 
@@ -383,7 +383,7 @@ class time_windows():
                     predictedlabel = self.algorithms_dict[alg].ip_labels[ip]
 
                     if debug:
-                        print ' > Computing errors for algorithm: {0}. Ip: {1}. Real label: {2}. Predicted label: {3}'.format( alg, ip, reallabel, predictedlabel)
+                        print(' > Computing errors for algorithm: {0}. Ip: {1}. Real label: {2}. Predicted label: {3}'.format( alg, ip, reallabel, predictedlabel))
 
                     # Is the predicted label the negative label?
                     #if self.algorithms_dict[alg].algorithm_labels[0] == predictedlabel :
@@ -395,14 +395,14 @@ class time_windows():
                             # Real is Normal. True Negative.
                             self.algorithms_dict[alg].addTN()
                             if debug or verbose:
-                                print '\tReal Label: \x1b\x5b1;33;40m{0}\x1b\x5b0;0;40m, {1}: {2}. Decision \x1b\x5b1;33;40mTN\x1b\x5b0;0;40m'.format(reallabel, self.algorithms_dict[alg].name, predictedlabel)
+                                print('\tReal Label: \x1b\x5b1;33;40m{0}\x1b\x5b0;0;40m, {1}: {2}. Decision \x1b\x5b1;33;40mTN\x1b\x5b0;0;40m'.format(reallabel, self.algorithms_dict[alg].name, predictedlabel))
 
                         #elif reallabel == self.algorithms_dict[alg].real_labels[1]:
                         elif self.algorithms_dict[alg].real_labels[1] in reallabel:
                             # Real is Botnet. False Negative.
                             self.algorithms_dict[alg].addFN()
                             if debug or verbose:
-                                print '\tReal Label: \x1b\x5b1;31;40m{0}\x1b\x5b0;0;40m, {1}: {2}. Decision: \x1b\x5b1;31;40mFN\x1b\x5b0;0;40m'.format(reallabel, self.algorithms_dict[alg].name, predictedlabel)
+                                print('\tReal Label: \x1b\x5b1;31;40m{0}\x1b\x5b0;0;40m, {1}: {2}. Decision: \x1b\x5b1;31;40mFN\x1b\x5b0;0;40m'.format(reallabel, self.algorithms_dict[alg].name, predictedlabel))
 
                         #elif reallabel == self.algorithms_dict[alg].real_labels[2]:
                         elif self.algorithms_dict[alg].real_labels[2] in reallabel:
@@ -420,14 +420,14 @@ class time_windows():
                             # Real is Normal. False Positive
                             self.algorithms_dict[alg].addFP()
                             if debug or verbose:
-                                print '\tReal Label: \x1b\x5b1;31;40m{0}\x1b\x5b0;0;40m, {1}: {2}. Decision: \x1b\x5b1;31;40mFP\x1b\x5b0;0;40m'.format(reallabel, self.algorithms_dict[alg].name, predictedlabel)
+                                print('\tReal Label: \x1b\x5b1;31;40m{0}\x1b\x5b0;0;40m, {1}: {2}. Decision: \x1b\x5b1;31;40mFP\x1b\x5b0;0;40m'.format(reallabel, self.algorithms_dict[alg].name, predictedlabel))
 
                         #elif reallabel == self.algorithms_dict[alg].real_labels[1]:
                         elif self.algorithms_dict[alg].real_labels[1] in reallabel:
                             # Real is Botnet. True Positive.
                             self.algorithms_dict[alg].addTP()
                             if debug or verbose:
-                                print '\tReal Label: \x1b\x5b1;33;40m{0}\x1b\x5b0;0;40m, {1}: {2}. Decision \x1b\x5b1;33;40mTP\x1b\x5b0;0;40m'.format(reallabel, self.algorithms_dict[alg].name, predictedlabel)
+                                print('\tReal Label: \x1b\x5b1;33;40m{0}\x1b\x5b0;0;40m, {1}: {2}. Decision \x1b\x5b1;33;40mTP\x1b\x5b0;0;40m'.format(reallabel, self.algorithms_dict[alg].name, predictedlabel))
 
                         #elif reallabel == self.algorithms_dict[alg].real_labels[2]:
                         elif self.algorithms_dict[alg].real_labels[2] in reallabel:
@@ -453,7 +453,7 @@ class time_windows():
                             # Real is Botnet. False Negative.
                             self.algorithms_dict[alg].addFN()
                             if debug or verbose:
-                                print '\tReal Label: \x1b\x5b1;31;40m{0}\x1b\x5b0;0;40m, {1}: {2}. Decision: \x1b\x5b1;31;40mFN\x1b\x5b0;0;40m'.format(reallabel, self.algorithms_dict[alg].name, predictedlabel)
+                                print('\tReal Label: \x1b\x5b1;31;40m{0}\x1b\x5b0;0;40m, {1}: {2}. Decision: \x1b\x5b1;31;40mFN\x1b\x5b0;0;40m'.format(reallabel, self.algorithms_dict[alg].name, predictedlabel))
 
                         #elif reallabel == self.algorithms_dict[alg].real_labels[2]:
                         elif self.algorithms_dict[alg].real_labels[2] in reallabel:
@@ -462,13 +462,13 @@ class time_windows():
 
         except Exception as inst:
             if debug:
-                print 'Some problem in compute_error() method of class time_window'
-            print type(inst)     # the exception instance
-            print inst.args      # arguments stored in .args
-            print inst           # __str__ allows args to printed directly
+                print('Some problem in compute_error() method of class time_window')
+            print(type(inst))     # the exception instance
+            print(inst.args)      # arguments stored in .args
+            print(inst)           # __str__ allows args to printed directly
             x, y = inst          # __getitem__ allows args to be unpacked directly
-            print 'x =', x
-            print 'y =', y
+            print('x =', x)
+            print('y =', y)
             exit(-1)
 
 
@@ -658,13 +658,13 @@ class algorithm():
 
         except Exception as inst:
             if debug:
-                print 'Some problem in clean_current_errors() method of class algorithm'
-            print type(inst)     # the exception instance
-            print inst.args      # arguments stored in .args
-            print inst           # __str__ allows args to printed directly
+                print('Some problem in clean_current_errors() method of class algorithm')
+            print(type(inst))     # the exception instance
+            print(inst.args)      # arguments stored in .args
+            print(inst)           # __str__ allows args to printed directly
             x, y = inst          # __getitem__ allows args to be unpacked directly
-            print 'x =', x
-            print 'y =', y
+            print('x =', x)
+            print('y =', y)
             exit(-1)
 
 
@@ -677,10 +677,10 @@ class algorithm():
         global debug
         try:
             if debug:
-                print ' > Computing errors for algorithm: {0}'.format(self.name)
+                print(' > Computing errors for algorithm: {0}'.format(self.name))
             # Verify that the new label is valid
             # The final 'or' is to accept labels that have a number at the end like 'Botnet6'
-            if (predictedlabel in self.algorithm_labels.values() and reallabel in self.real_labels.values()) or predictedlabel[:-1] in self.algorithm_labels.values() or predictedlabel[:-2] in self.algorithm_labels.values():
+            if (predictedlabel in list(self.algorithm_labels.values()) and reallabel in list(self.real_labels.values())) or predictedlabel[:-1] in list(self.algorithm_labels.values()) or predictedlabel[:-2] in list(self.algorithm_labels.values()):
                 # They are valid
 
                 # Is it the negative label?
@@ -693,21 +693,21 @@ class algorithm():
                         # Real is Normal. True Negative.
                         self.addTN()
                         if debug or verbose:
-                            print '\tReal Label: \x1b\x5b1;33;40m{0}\x1b\x5b0;0;40m, {1}: {2}. Decision \x1b\x5b1;33;40mTN\x1b\x5b0;0;40m'.format(reallabel, self.name, predictedlabel)
+                            print('\tReal Label: \x1b\x5b1;33;40m{0}\x1b\x5b0;0;40m, {1}: {2}. Decision \x1b\x5b1;33;40mTN\x1b\x5b0;0;40m'.format(reallabel, self.name, predictedlabel))
 
                     #elif reallabel == self.real_labels[1]:
                     elif self.real_labels[1] in reallabel:
                         # Real is Botnet. False Negative.
                         self.addFN()
                         if debug or verbose:
-                            print '\tReal Label: \x1b\x5b1;31;40m{0}\x1b\x5b0;0;40m, {1}: {2}. Decision: \x1b\x5b1;31;40mFN\x1b\x5b0;0;40m'.format(reallabel, self.name, predictedlabel)
+                            print('\tReal Label: \x1b\x5b1;31;40m{0}\x1b\x5b0;0;40m, {1}: {2}. Decision: \x1b\x5b1;31;40mFN\x1b\x5b0;0;40m'.format(reallabel, self.name, predictedlabel))
 
                     #elif reallabel == self.real_labels[2]:
                     elif self.real_labels[2] in reallabel:
                         # Real is Background.
                         self.addB1()
                         if debug:
-                            print '\t\tBackground1'
+                            print('\t\tBackground1')
 
                 # Is it the positive label?
                 # This comparison is to catch 'Botnet6' predicted label correctly as 'Botnet' real label.
@@ -720,21 +720,21 @@ class algorithm():
                         # Real is Normal. False Positive
                         self.addFP()
                         if debug or verbose:
-                            print '\tReal Label: \x1b\x5b1;31;40m{0}\x1b\x5b0;0;40m, {1}: {2}. Decision: \x1b\x5b1;31;40mFP\x1b\x5b0;0;40m'.format(reallabel, self.name, predictedlabel)
+                            print('\tReal Label: \x1b\x5b1;31;40m{0}\x1b\x5b0;0;40m, {1}: {2}. Decision: \x1b\x5b1;31;40mFP\x1b\x5b0;0;40m'.format(reallabel, self.name, predictedlabel))
 
                     #elif reallabel == self.real_labels[1]:
                     elif self.real_labels[1] in reallabel:
                         # Real is Botnet. True Positive.
                         self.addTP()
                         if debug or verbose:
-                            print '\tReal Label: \x1b\x5b1;33;40m{0}\x1b\x5b0;0;40m, {1}: {2}. Decision \x1b\x5b1;33;40mTP\x1b\x5b0;0;40m'.format(reallabel, self.name, predictedlabel)
+                            print('\tReal Label: \x1b\x5b1;33;40m{0}\x1b\x5b0;0;40m, {1}: {2}. Decision \x1b\x5b1;33;40mTP\x1b\x5b0;0;40m'.format(reallabel, self.name, predictedlabel))
 
                     #elif reallabel == self.real_labels[2]:
                     elif self.real_labels[2] in reallabel:
                         # Real is Background. 
                         self.addB2()
                         if debug:
-                            print '\t\tBackground2'
+                            print('\t\tBackground2')
 
                 # Is it the background label?
                 #elif self.algorithm_labels[2] == predictedlabel :
@@ -746,35 +746,35 @@ class algorithm():
                         # Real is Normal.
                         self.addB3()
                         if debug:
-                            print '\t\tBackground3'
+                            print('\t\tBackground3')
 
                     #elif reallabel == self.real_labels[1]:
                     elif self.real_labels[1] in reallabel:
                         # Real is Botnet.
                         self.addB4()
                         if debug:
-                            print '\t\tBackground4'
+                            print('\t\tBackground4')
 
                     #elif reallabel == self.real_labels[2]:
                     elif self.real_labels[2] in reallabel:
                         # Real is Background. 
                         self.addB5()
                         if debug:
-                            print '\t\tBackground5'
+                            print('\t\tBackground5')
 
             else:
                 # They are not valid
-                print 'WARNING! An invalid label was given for algorithm {0}: Algorithm accepted labels:{1}, algorithm predicted label:{2}. Real accepted labels:{3}, given real label: {4}'.format(self.name, self.algorithm_labels, predictedlabel, self.real_labels, reallabel)
+                print('WARNING! An invalid label was given for algorithm {0}: Algorithm accepted labels:{1}, algorithm predicted label:{2}. Real accepted labels:{3}, given real label: {4}'.format(self.name, self.algorithm_labels, predictedlabel, self.real_labels, reallabel))
                 exit(-1)
         except Exception as inst:
             if debug:
-                print 'Some problem in compute_error() method of class algorithm'
-            print type(inst)     # the exception instance
-            print inst.args      # arguments stored in .args
-            print inst           # __str__ allows args to printed directly
+                print('Some problem in compute_error() method of class algorithm')
+            print(type(inst))     # the exception instance
+            print(inst.args)      # arguments stored in .args
+            print(inst)           # __str__ allows args to printed directly
             x, y = inst          # __getitem__ allows args to be unpacked directly
-            print 'x =', x
-            print 'y =', y
+            print('x =', x)
+            print('y =', y)
             exit(-1)
 
 
@@ -782,7 +782,7 @@ class algorithm():
         """ The reported values """ 
         # I still did not found out how to use longest_name to change the width of the columns...
         text = '{0:30} TP={1:8}, TN={2:8}, FP={3:8}, FN={4:8}, TPR={5:.3f}, TNR={6:.3f}, FPR={7:.3f}, FNR={8:.3f}, Precision={9:7.4f}, Accuracy={10:5.4f}, ErrorRate={11:5.3f}, FM1={12:7.4f}, FM2={13:7.4f}, FM05={14:7.4f}, B1={15:8}, B2={16:8}, B3={17:3}, B4={18:3}, B5={19:3}'.format(self.name, self.TP, self.TN, self.FP, self.FN, self.TPR, self.TNR, self.FPR, self.FNR, self.Precision, self.Accuracy, self.ErrorRate, self.fmeasure1, self.fmeasure2, self.fmeasure05, self.B1, self.B2, self.B3, self.B4, self.B5)
-        print text
+        print(text)
 
     def report_CSV_print(self, longest_name, csv_handler):
         """ The reported values in csv format """ 
@@ -793,13 +793,13 @@ class algorithm():
     def current_reportprint(self, longest_name):
         """ The reported values """ 
         # I still did not found out how to use longest_name to change the width of the columns...
-        print '{0:30} TP={1:8}, TN={2:8}, FP={3:8}, FN={4:8}, TPR={5:.3f}, TNR={6:.3f}, FPR={7:.3f}, FNR={8:.3f}, Precision={9:7.4f}, Accuracy={10:5.4f}, ErrorRate={11:5.3f}, FM1={12:7.4f}, FM2={13:7.4f}, FM05={14:7.4f}, B1={15:8}, B2={16:8}, B3={17:3}, B4={18:3}, B5={19:3}'.format(self.name, self.cTP, self.cTN, self.cFP, self.cFN, self.cTPR, self.cTNR, self.cFPR, self.cFNR, self.cPrecision, self.cAccuracy, self.cErrorRate, self.cfmeasure1, self.cfmeasure2, self.cfmeasure05, self.cB1, self.cB2, self.cB3, self.cB4, self.cB5)
+        print('{0:30} TP={1:8}, TN={2:8}, FP={3:8}, FN={4:8}, TPR={5:.3f}, TNR={6:.3f}, FPR={7:.3f}, FNR={8:.3f}, Precision={9:7.4f}, Accuracy={10:5.4f}, ErrorRate={11:5.3f}, FM1={12:7.4f}, FM2={13:7.4f}, FM05={14:7.4f}, B1={15:8}, B2={16:8}, B3={17:3}, B4={18:3}, B5={19:3}'.format(self.name, self.cTP, self.cTN, self.cFP, self.cFN, self.cTPR, self.cTNR, self.cFPR, self.cFNR, self.cPrecision, self.cAccuracy, self.cErrorRate, self.cfmeasure1, self.cfmeasure2, self.cfmeasure05, self.cB1, self.cB2, self.cB3, self.cB4, self.cB5))
 
     def weighted_reportprint(self, longest_name):
         """ The reported values """ 
         # I still did not found out how to use longest_name to change the width of the columns...
         text = '{0:30} t-TP={1:.4f}, t-TN={2:8}, t-FP={3:8}, t-FN={4:.4f}, t-TPR={5:.3f}, t-TNR={6:.3f}, t-FPR={7:.3f}, t-FNR={8:.3f}, t-Precision={9:7.4f}, t-Accuracy={10:5.4f}, t-ErrorRate={11:5.3f}, t-FM1={12:7.4f}, t-FM2={13:7.4f}, t-FM05={14:7.4f}, t-B1={15:8}, t-B2={16:8}, t-B3={17:3}, t-B4={18:3}, t-B5={19:3}'.format(self.name, self.t_TP, self.t_TN, self.t_FP, self.t_FN, self.t_TPR, self.t_TNR, self.t_FPR, self.t_FNR, self.t_Precision, self.t_Accuracy, self.t_ErrorRate, self.t_fmeasure1, self.t_fmeasure2, self.t_fmeasure05, self.t_B1, self.t_B2, self.t_B3, self.t_B4, self.t_B5)
-        print text
+        print(text)
 
     def weighted_report_CSV_print(self, longest_name, csv_handler):
         """ The reported values """ 
@@ -811,7 +811,7 @@ class algorithm():
     def weighted_current_reportprint(self, longest_name):
         """ The reported values """ 
         # I still did not found out how to use longest_name to change the width of the columns...
-        print '{0:30} t-TP={1:.4f}, t-TN={2:8}, t-FP={3:8}, t-FN={4:.4f}, t-TPR={5:.3f}, t-TNR={6:.3f}, t-FPR={7:.3f}, t-FNR={8:.3f}, t-Precision={9:7.4f}, t-Accuracy={10:5.4f}, t-ErrorRate={11:5.3f}, t-FM1={12:7.4f}, t-FM2={13:7.4f}, t-FM05={14:7.4f}, t-B1={15:8}, t-B2={16:8}, t-B3={17:3}, t-B4={18:3}, t-B5={19:3}'.format(self.name, self.ct_TP, self.ct_TN, self.ct_FP, self.ct_FN, self.ct_TPR, self.ct_TNR, self.ct_FPR, self.ct_FNR, self.ct_Precision, self.ct_Accuracy, self.ct_ErrorRate, self.ct_fmeasure1, self.ct_fmeasure2, self.ct_fmeasure05, self.ct_B1, self.ct_B2, self.ct_B3, self.ct_B4, self.ct_B5)
+        print('{0:30} t-TP={1:.4f}, t-TN={2:8}, t-FP={3:8}, t-FN={4:.4f}, t-TPR={5:.3f}, t-TNR={6:.3f}, t-FPR={7:.3f}, t-FNR={8:.3f}, t-Precision={9:7.4f}, t-Accuracy={10:5.4f}, t-ErrorRate={11:5.3f}, t-FM1={12:7.4f}, t-FM2={13:7.4f}, t-FM05={14:7.4f}, t-B1={15:8}, t-B2={16:8}, t-B3={17:3}, t-B4={18:3}, t-B5={19:3}'.format(self.name, self.ct_TP, self.ct_TN, self.ct_FP, self.ct_FN, self.ct_TPR, self.ct_TNR, self.ct_FPR, self.ct_FNR, self.ct_Precision, self.ct_Accuracy, self.ct_ErrorRate, self.ct_fmeasure1, self.ct_fmeasure2, self.ct_fmeasure05, self.ct_B1, self.ct_B2, self.ct_B3, self.ct_B4, self.ct_B5))
 
     def addB1(self):
         """ Predicted negative but real was background """ 
@@ -916,9 +916,9 @@ class algorithm():
         except ZeroDivisionError:
             # ValueError was for dividing by 0. KeyError was if we still have no amount of ips with that label
             pass
-        except KeyError, ValueError:
+        except KeyError as ValueError:
             if debug:
-                print 'WARNING, something is broken on compute_weighted_metrics'
+                print('WARNING, something is broken on compute_weighted_metrics')
 
         # t-fn score
         try:
@@ -935,9 +935,9 @@ class algorithm():
         except ZeroDivisionError:
             # ValueError was for dividing by 0. KeyError was if we still have no amount of ips with that label
             pass
-        except KeyError, ValueError:
+        except KeyError as ValueError:
             if debug:
-                print 'WARNING, something is broken on compute_weighted_metrics'
+                print('WARNING, something is broken on compute_weighted_metrics')
 
         # t-fp score. 0 is normal ips
         try:
@@ -953,9 +953,9 @@ class algorithm():
         except ZeroDivisionError:
             # ValueError was for dividing by 0. KeyError was if we still have no amount of ips with that label
             pass
-        except KeyError, ValueError:
+        except KeyError as ValueError:
             if debug:
-                print 'WARNING, something is broken on compute_weighted_metrics'
+                print('WARNING, something is broken on compute_weighted_metrics')
 
         # t-tn score. 0 is normal ips
         try:
@@ -971,9 +971,9 @@ class algorithm():
         except ZeroDivisionError:
             # ValueError was for dividing by 0. KeyError was if we still have no amount of ips with that label
             pass
-        except KeyError, ValueError:
+        except KeyError as ValueError:
             if debug:
-                print 'WARNING, something is broken on compute_weighted_metrics'
+                print('WARNING, something is broken on compute_weighted_metrics')
 
 
         # t-b1 score. 2 is background ips
@@ -990,9 +990,9 @@ class algorithm():
         except ZeroDivisionError:
             # ValueError was for dividing by 0. KeyError was if we still have no amount of ips with that label
             pass
-        except KeyError, ValueError:
+        except KeyError as ValueError:
             if debug:
-                print 'WARNING, something is broken on compute_weighted_metrics'
+                print('WARNING, something is broken on compute_weighted_metrics')
 
         # t-b2 score. 2 is background ips
         try:
@@ -1008,9 +1008,9 @@ class algorithm():
         except ZeroDivisionError:
             # ValueError was for dividing by 0. KeyError was if we still have no amount of ips with that label
             pass
-        except KeyError, ValueError:
+        except KeyError as ValueError:
             if debug:
-                print 'WARNING, something is broken on compute_weighted_metrics'
+                print('WARNING, something is broken on compute_weighted_metrics')
 
         # t-b3 score. 2 is background ips
         try:
@@ -1026,9 +1026,9 @@ class algorithm():
         except ZeroDivisionError:
             # ValueError was for dividing by 0. KeyError was if we still have no amount of ips with that label
             pass
-        except KeyError, ValueError:
+        except KeyError as ValueError:
             if debug:
-                print 'WARNING, something is broken on compute_weighted_metrics'
+                print('WARNING, something is broken on compute_weighted_metrics')
 
         # t-b4 score. 2 is background ips
         try:
@@ -1044,9 +1044,9 @@ class algorithm():
         except ZeroDivisionError:
             # ValueError was for dividing by 0. KeyError was if we still have no amount of ips with that label
             pass
-        except KeyError, ValueError:
+        except KeyError as ValueError:
             if debug:
-                print 'WARNING, something is broken on compute_weighted_metrics'
+                print('WARNING, something is broken on compute_weighted_metrics')
 
         # t-b5 score. 2 is background ips
         try:
@@ -1062,9 +1062,9 @@ class algorithm():
         except ZeroDivisionError:
             # ValueError was for dividing by 0. KeyError was if we still have no amount of ips with that label
             pass
-        except KeyError, ValueError:
+        except KeyError as ValueError:
             if debug:
-                print 'WARNING, something is broken on compute_weighted_metrics'
+                print('WARNING, something is broken on compute_weighted_metrics')
 
         # t_TPR. Also Hit rate, detect rate, Recall or sensitivity. Portion of positives examples the model predicts correctly.
         try:
@@ -1307,13 +1307,13 @@ def plot(file, time_window, comparison_type, time_windows_group):
         global alpha
 
         if debug:
-            print ' > Plotting the metrics...'
+            print(' > Plotting the metrics...')
 
         # It does not catch up things like 0.4%
         percentage_of_the_file_tested = ""
 
         # We should plot all the metrics against the number of interval. From 1 
-        range_time_windows = range(1, time_window_id + 1)
+        range_time_windows = list(range(1, time_window_id + 1))
         
         if comparison_type == 'time':
             # We only work with bclus and CAMNEP here, we can not plot everything.
@@ -1364,13 +1364,13 @@ def plot(file, time_window, comparison_type, time_windows_group):
 
     except Exception as inst:
         if debug:
-            print 'Some problem in plot()'
-        print type(inst)     # the exception instance
-        print inst.args      # arguments stored in .args
-        print inst           # __str__ allows args to printed directly
+            print('Some problem in plot()')
+        print(type(inst))     # the exception instance
+        print(inst.args)      # arguments stored in .args
+        print(inst)           # __str__ allows args to printed directly
         x, y = inst          # __getitem__ allows args to be unpacked directly
-        print 'x =', x
-        print 'y =', y
+        print('x =', x)
+        print('y =', y)
         exit(-1)
 
 
@@ -1418,7 +1418,7 @@ def  extract_columns(line, tw, file_format):
         except KeyError:
             tw.amount_of_labels[columns['real_label']] = 1
         if debug:
-            print '  > Flow time:{0}, srcIP:{1}, Real Label:{2}'.format(columns['flow_time'],columns['srcIP'], columns['real_label'])
+            print('  > Flow time:{0}, srcIP:{1}, Real Label:{2}'.format(columns['flow_time'],columns['srcIP'], columns['real_label']))
 
         # We shuld read each column based on the algorithm, extract the label and assign it.
         for algorithm_name in tw.algorithms_dict:
@@ -1430,7 +1430,7 @@ def  extract_columns(line, tw, file_format):
                 elif file_format == 'Argus':
                     tw.algorithms_dict[algorithm_name].ip_current_labels[columns['srcIP']] = line.split(',')[tw.algorithms_dict[algorithm_name].headercolumn].strip('\n')
                 if debug:
-                    print '   > Extracting information for algorithm {0}. Label: {1}'.format(algorithm_name,tw.algorithms_dict[algorithm_name].ip_current_labels[columns['srcIP']])
+                    print('   > Extracting information for algorithm {0}. Label: {1}'.format(algorithm_name,tw.algorithms_dict[algorithm_name].ip_current_labels[columns['srcIP']]))
             except TypeError:
                 # Dummy algorithms
                 # The header column is being used as predicted label for some dummy algorithm.
@@ -1441,18 +1441,18 @@ def  extract_columns(line, tw, file_format):
         return columns
 
     except IndexError:
-        print 'WARNING! It seems that some columns are missing!'
+        print('WARNING! It seems that some columns are missing!')
         exit(-1)
 
     except Exception as inst:
         if debug:
-            print 'Some problem in extract_columns()'
-        print type(inst)     # the exception instance
-        print inst.args      # arguments stored in .args
-        print inst           # __str__ allows args to printed directly
+            print('Some problem in extract_columns()')
+        print(type(inst))     # the exception instance
+        print(inst.args)      # arguments stored in .args
+        print(inst)           # __str__ allows args to printed directly
         x, y = inst          # __getitem__ allows args to be unpacked directly
-        print 'x =', x
-        print 'y =', y
+        print('x =', x)
+        print('y =', y)
         exit(-1)
 
 
@@ -1476,7 +1476,7 @@ def report_errors(tw):
         #print 'B4: Predicted background, real positive.'
         #B5 is when the predicted label was background, and the real label was background.
         #print 'B5: Predicted background, real background.'
-        print
+        print()
 
         # Find the longest algo name
         max_name_len = 0
@@ -1485,14 +1485,14 @@ def report_errors(tw):
                 max_name_len = len(i)
 
         # Print the time window info
-        print tw
+        print(tw)
 
         # Print the results of each algorithm
         if comparison_type == 'time':
-            print '\n+ Current +'
+            print('\n+ Current +')
             for algorithm_name in tw.algorithms_dict:
                 tw.algorithms_dict[algorithm_name].current_reportprint(max_name_len)
-            print '\n+ Cumulative +'
+            print('\n+ Cumulative +')
             for algorithm_name in tw.algorithms_dict:
                 tw.algorithms_dict[algorithm_name].reportprint(max_name_len)
         elif comparison_type == 'weight':
@@ -1501,26 +1501,26 @@ def report_errors(tw):
             for algorithm_name in tw.algorithms_dict:
                 tw.algorithms_dict[algorithm_name].current_reportprint(max_name_len)
             """
-            print '\n+ Current Errors +'
+            print('\n+ Current Errors +')
             for algorithm_name in tw.algorithms_dict:
                 tw.algorithms_dict[algorithm_name].current_reportprint(max_name_len)
-            print '\n+ Current Weighted +'
+            print('\n+ Current Weighted +')
             for algorithm_name in tw.algorithms_dict:
                 tw.algorithms_dict[algorithm_name].weighted_current_reportprint(max_name_len)
-            print '\n+ Cumulative Weighted +'
+            print('\n+ Cumulative Weighted +')
             for algorithm_name in tw.algorithms_dict:
                 tw.algorithms_dict[algorithm_name].weighted_reportprint(max_name_len)
-        print
+        print()
 
     except Exception as inst:
         if debug:
-            print 'Some problem in report_errors()'
-        print type(inst)     # the exception instance
-        print inst.args      # arguments stored in .args
-        print inst           # __str__ allows args to printed directly
+            print('Some problem in report_errors()')
+        print(type(inst))     # the exception instance
+        print(inst.args)      # arguments stored in .args
+        print(inst)           # __str__ allows args to printed directly
         x, y = inst          # __getitem__ allows args to be unpacked directly
-        print 'x =', x
-        print 'y =', y
+        print('x =', x)
+        print('y =', y)
         exit(-1)
 
 
@@ -1535,9 +1535,9 @@ def report_final_errors():
         global comparison_type
         global csv_file
 
-        print '\n\n'
-        print '[+] Final Error Reporting [+]'
-        print '============================='
+        print('\n\n')
+        print('[+] Final Error Reporting [+]')
+        print('=============================')
 
         if comparison_type == 'time':
             for algorithm_name in time_windows_group[-1].algorithms_dict:
@@ -1549,12 +1549,12 @@ def report_final_errors():
                     time_windows_group[-1].algorithms_dict[algorithm_name].report_CSV_print(30,csv_handler)
                 csv_handler.close()
         elif comparison_type == 'weight':
-            print '\nCumulative Common errors'
-            print '-------------------------'
+            print('\nCumulative Common errors')
+            print('-------------------------')
             for algorithm_name in time_windows_group[-1].algorithms_dict:
                 time_windows_group[-1].algorithms_dict[algorithm_name].reportprint(30)
-            print '\nWeighted errors'
-            print '----------------'
+            print('\nWeighted errors')
+            print('----------------')
             for algorithm_name in time_windows_group[-1].algorithms_dict:
                 time_windows_group[-1].algorithms_dict[algorithm_name].weighted_reportprint(30)
             if csv_file:
@@ -1566,13 +1566,13 @@ def report_final_errors():
 
     except Exception as inst:
         if debug:
-            print 'Some problem in report_final_errors()'
-        print type(inst)     # the exception instance
-        print inst.args      # arguments stored in .args
-        print inst           # __str__ allows args to printed directly
+            print('Some problem in report_final_errors()')
+        print(type(inst))     # the exception instance
+        print(inst.args)      # arguments stored in .args
+        print(inst)           # __str__ allows args to printed directly
         x, y = inst          # __getitem__ allows args to be unpacked directly
-        print 'x =', x
-        print 'y =', y
+        print('x =', x)
+        print('y =', y)
         exit(-1)
 
 
@@ -1589,7 +1589,7 @@ def generate_algorithms(headersline, tw, file_format):
         temp_real_background_label = ''
 
         if debug:
-            print ' > Headers line read: {0}'.format(headersline)
+            print(' > Headers line read: {0}'.format(headersline))
 
         # Find algorithms names and number by reading the first line.
         if file_format == 'Netflow':
@@ -1599,7 +1599,7 @@ def generate_algorithms(headersline, tw, file_format):
         
         for algorithm_header in split_headers:
             if debug:
-                print '  >> Algorithm header read: {0}'.format(algorithm_header)
+                print('  >> Algorithm header read: {0}'.format(algorithm_header))
             algorithm_name = algorithm_header.split('(')[0]
             if file_format == 'Netflow':
                 algorithm_headercolumn = split_headers.index(algorithm_header) + 12
@@ -1619,12 +1619,12 @@ def generate_algorithms(headersline, tw, file_format):
                 algorithm_background_label = ''
 
             if debug:
-                print '    > Algorithm name: {0} (column {3}). Positive label: {1}, Negative Label: {2}, Background Label: {4}'.format(algorithm_name, algorithm_positive_label, algorithm_negative_label, algorithm_headercolumn, algorithm_background_label)
+                print('    > Algorithm name: {0} (column {3}). Positive label: {1}, Negative Label: {2}, Background Label: {4}'.format(algorithm_name, algorithm_positive_label, algorithm_negative_label, algorithm_headercolumn, algorithm_background_label))
 
             # Manage the real labels in the file
             if 'label' in algorithm_name.lower():
                 if debug:
-                    print '    > Generating the real labels.'
+                    print('    > Generating the real labels.')
                 # Store the real labels for later
                 temp_real_positive_label = algorithm_positive_label
                 temp_real_negative_label = algorithm_negative_label
@@ -1720,17 +1720,17 @@ def generate_algorithms(headersline, tw, file_format):
         tw.algorithms_dict[newalgorithm.name] = newalgorithm
 
         if debug:
-            print 'End generating the algorithms...\n'
+            print('End generating the algorithms...\n')
 
     except Exception as inst:
         if debug:
-            print 'Some problem in generate_algorithms'
-        print type(inst)     # the exception instance
-        print inst.args      # arguments stored in .args
-        print inst           # __str__ allows args to printed directly
+            print('Some problem in generate_algorithms')
+        print(type(inst))     # the exception instance
+        print(inst.args)      # arguments stored in .args
+        print(inst)           # __str__ allows args to printed directly
         x, y = inst          # __getitem__ allows args to be unpacked directly
-        print 'x =', x
-        print 'y =', y
+        print('x =', x)
+        print('y =', y)
         exit(-1)
 
 
@@ -1747,7 +1747,7 @@ def process_file(file, comparison_type, time_window):
         processing_init_time = datetime.now()
 
         if debug:
-            print 'Processsing file...'
+            print('Processsing file...')
 
         # Open the file for reading
         f = open(file,'r')
@@ -1756,9 +1756,9 @@ def process_file(file, comparison_type, time_window):
         line = f.readline()
 
         if line[0] != '#':
-            print
-            print 'WARNING! The first line must be commented with #, and be the headers line!!!'
-            print
+            print()
+            print('WARNING! The first line must be commented with #, and be the headers line!!!')
+            print()
             exit(-1)
 
 
@@ -1767,12 +1767,12 @@ def process_file(file, comparison_type, time_window):
             # Space separated. This means the old netflow format
             file_format = 'Netflow'
             if debug:
-                print 'Netflow file format. Space separated'
+                print('Netflow file format. Space separated')
         else:
             # Comma separated. This means the new biargus format
             file_format = 'Argus'
             if debug:
-                print 'Argus file format. Comma separated'
+                print('Argus file format. Comma separated')
 
         # Create an empty time window. For the flow-by-flow analysis this is the only time window. For the time-based analysis it is the first
         tw = time_windows()
@@ -1789,8 +1789,8 @@ def process_file(file, comparison_type, time_window):
         # If comparison is flow based...
         if comparison_type == 'flow':
             if debug:
-                print 'Comparing labels flow by flow...'
-                print 'Using file {0}.'.format(file)
+                print('Comparing labels flow by flow...')
+                print('Using file {0}.'.format(file))
 
             # We already read two lines
             tw.lines_read = 1
@@ -1836,12 +1836,12 @@ def process_file(file, comparison_type, time_window):
             for label in tw.amount_of_labels:
                 total = total + tw.amount_of_labels[label]
             if tw.lines_read != total:
-                print
-                print 'WARNING! The amount of labels read is not the same that the amount of labels in the file.'
-                print 'Lines read: {0}'.format(tw.lines_read)
+                print()
+                print('WARNING! The amount of labels read is not the same that the amount of labels in the file.')
+                print('Lines read: {0}'.format(tw.lines_read))
                 for label in tw.amount_of_labels:
-                    print 'Amount of {0} labels: {1}'.format(label, tw.amount_of_labels[label])
-                print 'Total amount of labels: {0}'.format(total)
+                    print('Amount of {0} labels: {1}'.format(label, tw.amount_of_labels[label]))
+                print('Total amount of labels: {0}'.format(total))
                 exit(-1)
 
             # Report errors
@@ -1852,8 +1852,8 @@ def process_file(file, comparison_type, time_window):
         # If comparison is time based or weight based...
         elif comparison_type == 'time' or comparison_type == 'weight':
             if debug:
-                print '\nComparing labels flows using a ' + str(time_window) + ' seconds time window.'
-                print 'Using file {0}.'.format(file)
+                print('\nComparing labels flows using a ' + str(time_window) + ' seconds time window.')
+                print('Using file {0}.'.format(file))
 
             # Store the time windows in the vector
             time_windows_group.append(tw)
@@ -1921,7 +1921,7 @@ def process_file(file, comparison_type, time_window):
                     #print ' > Delta time: {0} (time window={1})'.format(delta_time.total_seconds(),time_window)
 
                     if debug:
-                        print ' > Analyzing the time window {0}'.format(tw.id)
+                        print(' > Analyzing the time window {0}'.format(tw.id))
 
                     # We should compute errors for EACH IP address seen...
                     tw.compute_errors()
@@ -1976,7 +1976,7 @@ def process_file(file, comparison_type, time_window):
 
             if tw.ip_original_labels:
                 if debug:
-                    print '> There were still some lines not processed because the file ended but not the time window.'
+                    print('> There were still some lines not processed because the file ended but not the time window.')
                 # The las line belongs to this time window
                 tw.lines_read = tw.lines_read + 1
 
@@ -2027,19 +2027,19 @@ def process_file(file, comparison_type, time_window):
         # Processing time computing
         processing_finish_time = datetime.now()
         delta = processing_finish_time - processing_init_time
-        print '\nProcessing lasted {0} seconds'.format(delta.seconds)
+        print('\nProcessing lasted {0} seconds'.format(delta.seconds))
 
 
 
     except Exception as inst:
         if debug:
-            print 'Some problem in process_file()'
-        print type(inst)     # the exception instance
-        print inst.args      # arguments stored in .args
-        print inst           # __str__ allows args to printed directly
+            print('Some problem in process_file()')
+        print(type(inst))     # the exception instance
+        print(inst.args)      # arguments stored in .args
+        print(inst)           # __str__ allows args to printed directly
         x, y = inst          # __getitem__ allows args to be unpacked directly
-        print 'x =', x
-        print 'y =', y
+        print('x =', x)
+        print('y =', y)
         exit(-1)
 
 
@@ -2104,18 +2104,19 @@ def main():
                 usage()
                 sys.exit(1)
 
-        except Exception, e:
-                print "misc. exception (runtime error from user callback?):", e
+        except Exception as e:
+                print("misc. exception (runtime error from user callback?):", e)
         except KeyboardInterrupt:
                 sys.exit(1)
 
 
     except KeyboardInterrupt:
         # CTRL-C pretty handling.
-        print "Keyboard Interruption!. Exiting."
+        print("Keyboard Interruption!. Exiting.")
         sys.exit(1)
 
 
 if __name__ == '__main__':
     main()
+
 
