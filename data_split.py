@@ -6,7 +6,8 @@ TRAINING_SCENARIOS = [3, 4, 5, 7, 10, 11, 12, 13]
 TEST_SCENARIOS = [1, 2, 6, 8, 9]
 
 LABEL_COLUMN = 'Label'
-INTERESTING_COLUMNS = ['SrcAddr', 'DstAddr', 'Sport', 'Dport', LABEL_COLUMN]
+INTERESTING_COLUMNS = ['SrcAddr', 'DstAddr',
+                       'Sport', 'Dport', LABEL_COLUMN, 'StartTime']
 TRAINING_COLUMNS = ['SrcAddr', 'DstAddr', 'Sport', 'Dport']
 TESTING_COLUMNS = INTERESTING_COLUMNS
 

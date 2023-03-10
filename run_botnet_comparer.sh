@@ -1,0 +1,1 @@
+python3 BotnetDetectorsComparer/BotnetDetectorsComparer.py -f test_predictions.csv -t time -T 300 -p
