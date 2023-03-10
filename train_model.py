@@ -4,16 +4,27 @@ import pickle
 
 LOF_N_NEIGHBORS = 5
 
-# TODO aca estoy perdiendo apreciacion
-# quizas porque son floats, no se
-training_cases = np.genfromtxt(
-    "training_file_2.binetflow", delimiter=',', skip_header=True)
 
-training_cases = training_cases[~np.isnan(training_cases).any(axis=1), :]
+def train_model(training_file_name, save_model=False):
+    # TODO aca estoy perdiendo apreciacion
+    # quizas porque son floats, no se
+    training_cases = np.genfromtxt(
+        training_file_name,
+        delimiter=',',
+        skip_header=True
+    )
 
-lof_novelty = LocalOutlierFactor(
-    n_neighbors=LOF_N_NEIGHBORS, novelty=True).fit(training_cases)
+    training_cases = training_cases[~np.isnan(training_cases).any(axis=1), :]
 
-# save model
-model_file = open('model.pickle', 'wb')
-pickle.dump(lof_novelty, model_file)
+    lof_novelty = LocalOutlierFactor(
+        n_neighbors=LOF_N_NEIGHBORS, novelty=True).fit(training_cases)
+
+    if save_model:
+        model_file = open('model.pickle', 'wb')
+        pickle.dump(lof_novelty, model_file)
+
+    return lof_novelty
+
+
+if __name__ == "__main__":
+    train_model("training_file_2.binetflow")

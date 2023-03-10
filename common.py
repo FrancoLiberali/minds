@@ -1,0 +1,2 @@
+INTRUSION = 'Y'
+NOT_INTRUSION = 'N'

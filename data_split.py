@@ -1,8 +1,14 @@
 import pandas as pd
 import ipaddress
+import common
 
 TRAINING_SCENARIOS = [3, 4, 5, 7, 10, 11, 12, 13]
 TEST_SCENARIOS = [1, 2, 6, 8, 9]
+
+LABEL_COLUMN = 'Label'
+INTERESTING_COLUMNS = ['SrcAddr', 'DstAddr', 'Sport', 'Dport', LABEL_COLUMN]
+TRAINING_COLUMNS = ['SrcAddr', 'DstAddr', 'Sport', 'Dport']
+TESTING_COLUMNS = INTERESTING_COLUMNS
 
 
 def ip_to_int(ip):
@@ -15,21 +21,31 @@ def ip_to_int(ip):
             return None
 
 
-def create_training_file(file_name_list):
-    full_training_file = pd.DataFrame()
+def label_to_intrusion(label):
+    if "Background" in label or "Normal" in label:
+        return common.NOT_INTRUSION
+    return common.INTRUSION
+
+
+def concat_files(output_file_name, file_name_list, filter_botnet, columns_to_keep):
+    concat_df = pd.DataFrame()
 
     for file_name in file_name_list:
         print(file_name)
         scenario = pd.read_csv(
             file_name,
-            usecols=['SrcAddr', 'DstAddr', 'Sport', 'Dport', 'Label']
+            usecols=INTERESTING_COLUMNS
         )
 
-        # keep only flows with label Normal and Background
-        scenario = scenario[
-            scenario['Label'].str.contains(
-                "Background") | scenario['Label'].str.contains("Normal")
-        ]
+        if filter_botnet:
+            # keep only flows with label Normal and Background
+            scenario = scenario[
+                scenario[LABEL_COLUMN].str.contains(
+                    "Background") | scenario[LABEL_COLUMN].str.contains("Normal")
+            ]
+        else:
+            scenario[LABEL_COLUMN] = scenario[
+                LABEL_COLUMN].apply(label_to_intrusion)
 
         # map ip address to int
         scenario['SrcAddr'] = scenario[
@@ -40,21 +56,35 @@ def create_training_file(file_name_list):
         # remove rows with null values
         scenario = scenario[
             scenario[
-                ['SrcAddr', 'DstAddr', 'Sport', 'Dport']
+                columns_to_keep
             ].notnull().all(1)
         ]
 
-        full_training_file = pd.concat(
-            [full_training_file, scenario[['SrcAddr', 'DstAddr', 'Sport', 'Dport']]], ignore_index=True)
+        concat_df = pd.concat(
+            [concat_df, scenario[columns_to_keep]], ignore_index=True)
         del scenario
 
-    full_training_file.to_csv("training_file.binetflow", index=False)
-    return full_training_file
+    concat_df.to_csv(output_file_name, index=False)
+    return concat_df
 
 
 def data_split_2format():
-    create_training_file(
-        [f"{file_number}.binetflow.2format" for file_number in TRAINING_SCENARIOS])
+    # print("Creating training file")
+    # concat_files(
+    #     "training_file.binetflow",
+    #     [f"{file_number}.binetflow.2format" for file_number in TRAINING_SCENARIOS],
+    #     True,
+    #     TRAINING_COLUMNS,
+    # )
+
+    print("Creating test file")
+    concat_files(
+        "test_file.binetflow",
+        [f"{file_number}.binetflow.2format" for file_number in TEST_SCENARIOS],
+        False,
+        TESTING_COLUMNS,
+    )
 
 
-data_split_2format()
+if __name__ == "__main__":
+    data_split_2format()
