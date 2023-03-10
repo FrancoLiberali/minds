@@ -19,6 +19,8 @@ def evaluate_model(training_file_path, test_file_path):
         usecols=(0, 1, 2, 3)
     )
 
+    test_cases = test_cases[~np.isnan(test_cases).any(axis=1), :]
+
     predictions = model.predict(test_cases)
     predictions = [INTRUSION if prediction <=
                    INTRUSION_THRESHOLD else NOT_INTRUSION for prediction in predictions]
