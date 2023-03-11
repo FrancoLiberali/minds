@@ -22,6 +22,16 @@ def ip_to_int(ip):
             return None
 
 
+def port_to_int(port):
+    try:
+        return int(port)
+    except:
+        try:
+            return int(port, base=16)
+        except:
+            return None
+
+
 def concat_files(output_file_name, file_name_list, filter_botnet, columns_to_keep):
     concat_df = pd.DataFrame()
 
@@ -38,14 +48,17 @@ def concat_files(output_file_name, file_name_list, filter_botnet, columns_to_kee
                 common.get_normal_and_background_indexes(scenario)
             ]
 
-        # TODO do not remove icmp, check what port means there
-        scenario = scenario[scenario["Proto"] != "icmp"]
-
         # map ip address to int
         scenario['SrcAddr'] = scenario[
             'SrcAddr'].apply(ip_to_int)
         scenario['DstAddr'] = scenario[
             'DstAddr'].apply(ip_to_int)
+
+        # map port to int (because icmp ports are in hexadecimal)
+        scenario['Sport'] = scenario[
+            'Sport'].apply(port_to_int)
+        scenario['Dport'] = scenario[
+            'Dport'].apply(port_to_int)
 
         # remove rows with null values
         scenario = scenario[
