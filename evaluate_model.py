@@ -8,6 +8,8 @@ INTRUSION = 'Y'
 NOT_INTRUSION = 'N'
 NEW_COLUMN_HEADER = f"IMT_MINDS ({NOT_INTRUSION}:{INTRUSION})"
 
+SRCADDR_DESTADDR_SPORT_DPORT_PROTO_INDEXES = (0, 1, 2, 3, 4)
+
 
 def evaluate_model(training_file_path, test_file_path):
     model = train_model.train_model(training_file_path)
@@ -16,7 +18,7 @@ def evaluate_model(training_file_path, test_file_path):
         test_file_path,
         delimiter=',',
         skip_header=True,
-        usecols=(0, 1, 2, 3)
+        usecols=SRCADDR_DESTADDR_SPORT_DPORT_PROTO_INDEXES
     )
 
     test_cases = test_cases[~np.isnan(test_cases).any(axis=1), :]

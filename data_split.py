@@ -7,9 +7,14 @@ TEST_SCENARIOS = [1, 2, 6, 8, 9]
 
 LABEL_COLUMN = 'Label'
 INTERESTING_COLUMNS = ['SrcAddr', 'DstAddr',
-                       'Sport', 'Dport', LABEL_COLUMN, 'StartTime', 'Proto']
-TRAINING_COLUMNS = ['SrcAddr', 'DstAddr', 'Sport', 'Dport']
+                       'Sport', 'Dport', 'Proto', LABEL_COLUMN, 'StartTime']
+TRAINING_COLUMNS = ['SrcAddr', 'DstAddr', 'Sport', 'Dport', 'Proto']
 TESTING_COLUMNS = INTERESTING_COLUMNS
+
+PROTOCOLS = ['tcp', 'udp', 'icmp', 'ipv6-icmp',
+             'rtcp', 'rtp', 'udt', 'ipx/spx', 'arp',
+             'esp', 'pim', 'igmp', 'unas', 'rarp', 'llc',
+             'ipv6', 'rsvp']
 
 
 def ip_to_int(ip):
@@ -29,7 +34,11 @@ def port_to_int(port):
         try:
             return int(port, base=16)
         except:
-            return None
+            return 0
+
+
+def protocol_to_int(protocol):
+    return PROTOCOLS.index(protocol)
 
 
 def concat_files(output_file_name, file_name_list, filter_botnet, columns_to_keep):
@@ -59,6 +68,11 @@ def concat_files(output_file_name, file_name_list, filter_botnet, columns_to_kee
             'Sport'].apply(port_to_int)
         scenario['Dport'] = scenario[
             'Dport'].apply(port_to_int)
+
+        # map protocol to int
+        # print(scenario['Proto'].unique().tolist())
+        scenario['Proto'] = scenario[
+            'Proto'].apply(protocol_to_int)
 
         # remove rows with null values
         scenario = scenario[
