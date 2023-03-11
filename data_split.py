@@ -7,7 +7,7 @@ TEST_SCENARIOS = [1, 2, 6, 8, 9]
 
 LABEL_COLUMN = 'Label'
 INTERESTING_COLUMNS = ['SrcAddr', 'DstAddr',
-                       'Sport', 'Dport', LABEL_COLUMN, 'StartTime']
+                       'Sport', 'Dport', LABEL_COLUMN, 'StartTime', 'Proto']
 TRAINING_COLUMNS = ['SrcAddr', 'DstAddr', 'Sport', 'Dport']
 TESTING_COLUMNS = INTERESTING_COLUMNS
 
@@ -37,6 +37,9 @@ def concat_files(output_file_name, file_name_list, filter_botnet, columns_to_kee
             scenario = scenario[
                 common.get_normal_and_background_indexes(scenario)
             ]
+
+        # TODO do not remove icmp, check what port means there
+        scenario = scenario[scenario["Proto"] != "icmp"]
 
         # map ip address to int
         scenario['SrcAddr'] = scenario[
