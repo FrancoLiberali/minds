@@ -24,7 +24,7 @@ def generate_time_window_features(df):
 
     while first_index < rows_amount:
         percentage = (first_index * 100) // rows_amount
-        if percentage >= last_percentage + 5:
+        if percentage > last_percentage:
             print(f"{percentage}%")
             last_percentage = percentage
 
