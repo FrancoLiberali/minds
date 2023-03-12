@@ -33,7 +33,7 @@ TESTING_COLUMNS = INTERESTING_COLUMNS
 PROTOCOLS = ['tcp', 'udp', 'icmp', 'ipv6-icmp',
              'rtcp', 'rtp', 'udt', 'ipx/spx', 'arp',
              'esp', 'pim', 'igmp', 'unas', 'rarp', 'llc',
-             'ipv6', 'rsvp']
+             'ipv6', 'rsvp', 'ipnip', 'gre']
 
 
 def ip_to_int(ip):
