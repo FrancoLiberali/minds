@@ -8,19 +8,9 @@ INTRUSION = 'Y'
 NOT_INTRUSION = 'N'
 NEW_COLUMN_HEADER = f"IMT_MINDS ({NOT_INTRUSION}:{INTRUSION})"
 
-EVALUATION_INDEXES = (0, 1, 2, 3, 4, 7, 8, 9, 10)
 
-
-def evaluate_model(training_file_path, test_file_path):
-    model = train_model.train_model(training_file_path)
-
-    test_cases = np.genfromtxt(
-        test_file_path,
-        delimiter=',',
-        skip_header=True,
-        usecols=EVALUATION_INDEXES
-    )
-
+def evaluate_model(model, test_cases_df):
+    test_cases = test_cases_df[common.MODEL_COLUMNS].to_numpy()
     test_cases = test_cases[~np.isnan(test_cases).any(axis=1), :]
 
     predictions = model.predict(test_cases)
@@ -32,7 +22,7 @@ def evaluate_model(training_file_path, test_file_path):
 
     del test_cases
 
-    df = pd.read_csv(test_file_path)
+    df = test_cases_df
     df[NEW_COLUMN_HEADER] = predictions
 
     # add columns required by BotnetDetectorsComparer but that are not really used
@@ -49,8 +39,10 @@ def evaluate_model(training_file_path, test_file_path):
     return df
 
 
-def evaluate_model_and_print(training_file_path, test_file_path):
-    df = evaluate_model(training_file_path, test_file_path)
+def evaluate_model_and_print(training_cases, test_cases_df):
+    model = train_model.train_model(training_cases)
+
+    df = evaluate_model(model, test_cases_df)
 
     is_normal_or_background = common.get_normal_and_background_indexes(df)
     is_predicted_intrusion = df[NEW_COLUMN_HEADER] == INTRUSION
@@ -67,7 +59,17 @@ def evaluate_model_and_print(training_file_path, test_file_path):
     print(f"FP: {FP_amount} / {total_amount}")
     print(f"FN: {FN_amount} / {total_amount}")
 
+    return model, df
+
 
 if __name__ == "__main__":
-    evaluate_model_and_print(
-        "training_file.binetflow", "test_file.binetflow")
+    test_cases_df = pd.read_csv("test_file.binetflow")
+
+    training_cases = np.genfromtxt(
+        "training_file.binetflow",
+        delimiter=',',
+        skip_header=True,
+        usecols=common.TRAINING_INDEXES
+    )
+
+    evaluate_model_and_print(training_cases, test_cases_df)
