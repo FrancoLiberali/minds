@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import pandas as pd
 
-T_WINDOW = 10  # seconds
+T_WINDOW = 30  # seconds
 
 
 def generate_time_window_features(df):
