@@ -3,8 +3,25 @@ import ipaddress
 import common
 import features
 
-TRAINING_SCENARIOS = [3, 4, 5, 7, 10, 11, 12, 13]
-TEST_SCENARIOS = [1, 2, 6, 8, 9]
+TRAINING_SCENARIOS = [
+    "capture20110812.binetflow.2format",  # 3
+    "capture20110815.binetflow.2format",  # 4
+    "capture20110815-2.binetflow.2format",  # 5
+    "capture20110816-2.binetflow.2format",  # 7
+    "capture20110818.binetflow.2format",  # 10
+    "capture20110818-2.binetflow.2format",  # 11
+    "capture20110819.binetflow.2format",  # 12
+    "capture20110815-3.binetflow.2format",  # 13
+
+]
+
+TEST_SCENARIOS = [
+    "capture20110810.binetflow.2format",  # 1
+    "capture20110811.binetflow.2format",  # 2
+    "capture20110816.binetflow.2format",  # 6
+    "capture20110816-3.binetflow.2format",  # 8
+    "capture20110817.binetflow.2format",  # 9
+]
 
 LABEL_COLUMN = 'Label'
 INTERESTING_COLUMNS = ['SrcAddr', 'DstAddr',
@@ -98,7 +115,7 @@ def data_split_2format(training_file_name, test_file_name):
     print("Creating training file")
     training_df = concat_files(
         training_file_name,
-        [f"{file_number}.binetflow.2format" for file_number in TRAINING_SCENARIOS],
+        TRAINING_SCENARIOS,
         # ["3_r.binetflow.2format"],
         True,
         TRAINING_COLUMNS,
@@ -107,7 +124,7 @@ def data_split_2format(training_file_name, test_file_name):
     print("Creating test file")
     testing_df = concat_files(
         test_file_name,
-        [f"{file_number}.binetflow.2format" for file_number in TEST_SCENARIOS],
+        TEST_SCENARIOS,
         # ["1_r.binetflow.2format"],
         False,
         TESTING_COLUMNS,
