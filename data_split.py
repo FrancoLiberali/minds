@@ -89,23 +89,26 @@ def concat_files(output_file_name, file_name_list, filter_botnet, columns_to_kee
 
     concat_df = features.generate_time_window_features(concat_df)
 
-    concat_df.to_csv(output_file_name, index=False)
+    if output_file_name:
+        concat_df.to_csv(output_file_name, index=False)
     return concat_df
 
 
-def data_split_2format():
+def data_split_2format(training_file_name, test_file_name):
     print("Creating training file")
     training_df = concat_files(
-        "training_file.binetflow",
+        training_file_name,
         [f"{file_number}.binetflow.2format" for file_number in TRAINING_SCENARIOS],
+        # ["3_r.binetflow.2format"],
         True,
         TRAINING_COLUMNS,
     )
 
     print("Creating test file")
     testing_df = concat_files(
-        "test_file.binetflow",
+        test_file_name,
         [f"{file_number}.binetflow.2format" for file_number in TEST_SCENARIOS],
+        # ["1_r.binetflow.2format"],
         False,
         TESTING_COLUMNS,
     )
@@ -114,4 +117,4 @@ def data_split_2format():
 
 
 if __name__ == "__main__":
-    data_split_2format()
+    data_split_2format("training_file.binetflow", "test_file.binetflow")
