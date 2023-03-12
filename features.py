@@ -14,16 +14,22 @@ def generate_time_window_features(df):
     last_index = 0
     w_start_time = df.iloc[first_index]['StartTimeDatetime']
 
+    rows_amount = len(df)
+
     final_df = pd.DataFrame()
 
-    while first_index < len(df):
+    while first_index < rows_amount:
         w_finish_time = w_start_time + timedelta(seconds=T_WINDOW)
 
-        last_index = df[
-            df['StartTimeDatetime'] <= w_finish_time
-        ].index.to_list()[-1]
+        resting_df = df.iloc[first_index:]
 
-        if last_index >= first_index:
+        in_window_indexes = resting_df[
+            resting_df['StartTimeDatetime'] <= w_finish_time
+        ].index.to_list()
+
+        if in_window_indexes:
+            last_index = in_window_indexes[-1]
+
             window_df = df.iloc[first_index: last_index + 1]
 
             # count-dest
@@ -59,8 +65,8 @@ def generate_time_window_features(df):
             )
 
             final_df = pd.concat([final_df, window_df], ignore_index=True)
+            first_index = last_index + 1
 
-        first_index = last_index + 1
         w_start_time = w_finish_time
 
     final_df = final_df.drop("StartTimeDatetime", axis=1)
