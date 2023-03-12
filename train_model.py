@@ -4,7 +4,7 @@ import pickle
 
 LOF_N_NEIGHBORS = 5
 
-TRAINING_INDEXES = (0, 1, 2, 3, 4, 6)
+TRAINING_INDEXES = (0, 1, 2, 3, 4, 6, 7)
 
 
 def train_model(training_file_name, save_model=False):

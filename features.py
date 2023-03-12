@@ -29,9 +29,17 @@ def generate_time_window_features(df):
             # count-dest
             window_df = window_df.join(
                 window_df.groupby(
-                    ['SrcAddr', 'DstAddr']
-                ).size().rename("count-dest"),
-                on=['SrcAddr', 'DstAddr']
+                    ['SrcAddr']
+                )['DstAddr'].nunique().rename("count-dest"),
+                on=['SrcAddr']
+            )
+
+            # count-src
+            window_df = window_df.join(
+                window_df.groupby(
+                    ['DstAddr']
+                )['SrcAddr'].nunique().rename("count-src"),
+                on=['DstAddr']
             )
 
             final_df = pd.concat([final_df, window_df], ignore_index=True)

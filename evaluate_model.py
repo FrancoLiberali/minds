@@ -8,7 +8,7 @@ INTRUSION = 'Y'
 NOT_INTRUSION = 'N'
 NEW_COLUMN_HEADER = f"IMT_MINDS ({NOT_INTRUSION}:{INTRUSION})"
 
-EVALUATION_INDEXES = (0, 1, 2, 3, 4, 7)
+EVALUATION_INDEXES = (0, 1, 2, 3, 4, 7, 8)
 
 
 def evaluate_model(training_file_path, test_file_path):
