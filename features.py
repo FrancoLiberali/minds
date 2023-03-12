@@ -42,6 +42,22 @@ def generate_time_window_features(df):
                 on=['DstAddr']
             )
 
+            # count-serv-src
+            window_df = window_df.join(
+                window_df.groupby(
+                    ['SrcAddr', 'Dport']
+                ).size().rename("count-serv-src"),
+                on=['SrcAddr', 'Dport']
+            )
+
+            # count-serv-dest
+            window_df = window_df.join(
+                window_df.groupby(
+                    ['DstAddr', 'Sport']
+                ).size().rename("count-serv-dest"),
+                on=['DstAddr', 'Sport']
+            )
+
             final_df = pd.concat([final_df, window_df], ignore_index=True)
 
         first_index = last_index + 1
