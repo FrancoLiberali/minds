@@ -4,12 +4,15 @@ import pickle
 
 LOF_N_NEIGHBORS = 5
 
+TRAINING_INDEXES = (0, 1, 2, 3, 4, 6)
+
 
 def train_model(training_file_name, save_model=False):
     training_cases = np.genfromtxt(
         training_file_name,
         delimiter=',',
-        skip_header=True
+        skip_header=True,
+        usecols=TRAINING_INDEXES
     )
 
     training_cases = training_cases[~np.isnan(training_cases).any(axis=1), :]

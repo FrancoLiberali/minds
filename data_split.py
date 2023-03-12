@@ -1,6 +1,7 @@
 import pandas as pd
 import ipaddress
 import common
+import features
 
 TRAINING_SCENARIOS = [3, 4, 5, 7, 10, 11, 12, 13]
 TEST_SCENARIOS = [1, 2, 6, 8, 9]
@@ -8,7 +9,8 @@ TEST_SCENARIOS = [1, 2, 6, 8, 9]
 LABEL_COLUMN = 'Label'
 INTERESTING_COLUMNS = ['SrcAddr', 'DstAddr',
                        'Sport', 'Dport', 'Proto', LABEL_COLUMN, 'StartTime']
-TRAINING_COLUMNS = ['SrcAddr', 'DstAddr', 'Sport', 'Dport', 'Proto']
+TRAINING_COLUMNS = ['SrcAddr', 'DstAddr',
+                    'Sport', 'Dport', 'Proto', 'StartTime']
 TESTING_COLUMNS = INTERESTING_COLUMNS
 
 PROTOCOLS = ['tcp', 'udp', 'icmp', 'ipv6-icmp',
@@ -84,6 +86,8 @@ def concat_files(output_file_name, file_name_list, filter_botnet, columns_to_kee
         concat_df = pd.concat(
             [concat_df, scenario[columns_to_keep]], ignore_index=True)
         del scenario
+
+    concat_df = features.generate_time_window_features(concat_df)
 
     concat_df.to_csv(output_file_name, index=False)
     return concat_df
