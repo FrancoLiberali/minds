@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import pandas as pd
 
-T_WINDOW = 30  # seconds
+T_WINDOW = 60  # seconds
 
 
 def generate_time_window_features(df):
@@ -23,14 +23,16 @@ def generate_time_window_features(df):
 
         resting_df = df.iloc[first_index:]
 
-        in_window_indexes = resting_df[
-            resting_df['StartTimeDatetime'] <= w_finish_time
-        ].index.to_list()
+        last_index = resting_df[
+            'StartTimeDatetime'
+        ].searchsorted(w_finish_time)
 
-        if in_window_indexes:
-            last_index = in_window_indexes[-1]
-
-            window_df = df.iloc[first_index: last_index + 1]
+        if last_index == 0:
+            # if the window is empty go directly to the window starting in the first element
+            w_start_time = resting_df.iloc[0]['StartTimeDatetime']
+        else:
+            last_index = first_index + last_index
+            window_df = df.iloc[first_index: last_index]
 
             # count-dest
             window_df = window_df.join(
@@ -65,7 +67,7 @@ def generate_time_window_features(df):
             )
 
             final_df = pd.concat([final_df, window_df], ignore_index=True)
-            first_index = last_index + 1
+            first_index = last_index
 
         w_start_time = w_finish_time
 
