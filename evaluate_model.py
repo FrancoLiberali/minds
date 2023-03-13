@@ -9,7 +9,7 @@ NOT_INTRUSION = 'N'
 NEW_COLUMN_HEADER = f"IMT_MINDS ({NOT_INTRUSION}:{INTRUSION})"
 
 
-def evaluate_model(model, test_cases_df):
+def evaluate_model(model, test_cases_df, predictions_file):
     test_cases = test_cases_df[common.MODEL_COLUMNS].to_numpy()
     # test_cases = test_cases[~np.isnan(test_cases).any(axis=1), :]
 
@@ -32,17 +32,17 @@ def evaluate_model(model, test_cases_df):
     df = df.rename(columns={'StartTime': '#stime',
                             'SrcAddr': 'saddr', 'Sport': 'sport', 'DstAddr': 'daddr', 'Dport': 'dport'})
 
-    df.to_csv("test_predictions.csv", index=False,
-              columns=['#stime', 'dur', 'runtime', 'proto', 'saddr', 'sport', 'dir', 'daddr', 'dport', 'state', 'sjit', 'djit', 'stos', 'dtos', 'pkts', 'bytes', 'trans', 'mean', 'stddev', 'rate', 'sintpkt', 'sintdist', 'sintpktact', 'sintdistact', 'sintpktidl', 'sintdistidl', 'dintpkt', 'dintdist', 'dintpktact', 'dintdistact', 'dintpktidl', 'dintdistidl', 'Label', NEW_COLUMN_HEADER,
-                       ])
+    if predictions_file:
+        df.to_csv(predictions_file, index=False,
+                  columns=[
+                      '#stime', 'dur', 'runtime', 'proto', 'saddr', 'sport', 'dir', 'daddr', 'dport', 'state', 'sjit', 'djit', 'stos', 'dtos', 'pkts', 'bytes', 'trans', 'mean', 'stddev', 'rate', 'sintpkt', 'sintdist', 'sintpktact', 'sintdistact', 'sintpktidl', 'sintdistidl', 'dintpkt', 'dintdist', 'dintpktact', 'dintdistact', 'dintpktidl', 'dintdistidl', 'Label', NEW_COLUMN_HEADER,
+                  ])
 
     return df
 
 
-def evaluate_model_and_print(training_cases, test_cases_df):
-    model = train_model.train_model(training_cases)
-
-    df = evaluate_model(model, test_cases_df)
+def evaluate_model_and_print(model, test_cases_df, predictions_file):
+    df = evaluate_model(model, test_cases_df, predictions_file)
 
     is_normal_or_background = common.get_normal_and_background_indexes(df)
     is_predicted_intrusion = df[NEW_COLUMN_HEADER] == INTRUSION
@@ -59,7 +59,7 @@ def evaluate_model_and_print(training_cases, test_cases_df):
     print(f"FP: {FP_amount} / {total_amount}")
     print(f"FN: {FN_amount} / {total_amount}")
 
-    return model, df
+    return df
 
 
 if __name__ == "__main__":
@@ -72,4 +72,5 @@ if __name__ == "__main__":
         usecols=common.TRAINING_INDEXES
     )
 
-    evaluate_model_and_print(training_cases, test_cases_df)
+    model = train_model.train_model(training_cases)
+    evaluate_model_and_print(model, test_cases_df, "test_predictions.csv")
