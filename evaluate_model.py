@@ -11,7 +11,7 @@ NEW_COLUMN_HEADER = f"IMT_MINDS ({NOT_INTRUSION}:{INTRUSION})"
 
 def evaluate_model(model, test_cases_df):
     test_cases = test_cases_df[common.MODEL_COLUMNS].to_numpy()
-    test_cases = test_cases[~np.isnan(test_cases).any(axis=1), :]
+    # test_cases = test_cases[~np.isnan(test_cases).any(axis=1), :]
 
     predictions = model.predict(test_cases)
     predictions = [INTRUSION if prediction <=

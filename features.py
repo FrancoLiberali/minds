@@ -80,5 +80,6 @@ def generate_time_window_features(df):
 
         w_start_time = w_finish_time
 
+    print("100%")
     final_df = final_df.drop("StartTimeDatetime", axis=1)
     return final_df
