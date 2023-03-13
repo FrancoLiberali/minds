@@ -6,11 +6,11 @@ import common
 LOF_N_NEIGHBORS = 5
 
 
-def train_model(training_cases, save_model=False):
+def train_model(training_cases, n_neighbors=LOF_N_NEIGHBORS, save_model=False):
     training_cases = training_cases[~np.isnan(training_cases).any(axis=1), :]
 
     lof_novelty = LocalOutlierFactor(
-        n_neighbors=LOF_N_NEIGHBORS, novelty=True
+        n_neighbors=n_neighbors, novelty=True
     ).fit(training_cases)
 
     if save_model:
