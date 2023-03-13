@@ -63,7 +63,9 @@ def evaluate_model_and_print(model, test_cases_df, predictions_file):
 
 
 if __name__ == "__main__":
-    test_cases_df = pd.read_csv("test_file.binetflow")
+    test_cases_df = pd.read_csv("test_file.binetflow",
+                                dtype={'DstAddr': np.float64, 'SrcAddr': np.float64, 'Sport': np.int32, 'Dport': np.int32, 'Proto': np.int32,
+                                       'count-dest': np.int32, 'count-src': np.int32, 'count-serv-src': np.int32, 'count-serv-dest': np.int32})
 
     training_cases = np.genfromtxt(
         "training_file.binetflow",
