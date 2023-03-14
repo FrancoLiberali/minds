@@ -16,11 +16,11 @@ TRAINING_SCENARIOS = [
 ]
 
 TEST_SCENARIOS = [
-    "capture20110810.binetflow.2format",  # 1
-    "capture20110811.binetflow.2format",  # 2
+    # "capture20110810.binetflow.2format",  # 1
+    # "capture20110811.binetflow.2format",  # 2
     "capture20110816.binetflow.2format",  # 6
-    "capture20110816-3.binetflow.2format",  # 8
-    "capture20110817.binetflow.2format",  # 9
+    # "capture20110816-3.binetflow.2format",  # 8
+    # "capture20110817.binetflow.2format",  # 9
 ]
 
 LABEL_COLUMN = 'Label'
