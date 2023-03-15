@@ -163,3 +163,4 @@ cython_debug/
 *.binetflow.2format
 *.pickle
 *.csv
+!results.csv
