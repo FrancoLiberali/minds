@@ -4,7 +4,7 @@ import pandas as pd
 T_WINDOW = 60  # seconds
 
 
-def generate_time_window_features(df):
+def generate_time_window_features(df, t_window=T_WINDOW):
     print("Generating time window features")
     df["StartTimeDatetime"] = pd.to_datetime(
         df['StartTime'],
@@ -28,7 +28,7 @@ def generate_time_window_features(df):
             print(f"{percentage}%")
             last_percentage = percentage
 
-        w_finish_time = w_start_time + timedelta(seconds=T_WINDOW)
+        w_finish_time = w_start_time + timedelta(seconds=t_window)
 
         resting_df = df.iloc[first_index:]
 
