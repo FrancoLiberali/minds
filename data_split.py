@@ -60,7 +60,7 @@ def protocol_to_int(protocol):
     return PROTOCOLS.index(protocol)
 
 
-def concat_files(output_file_name, file_name_list, filter_botnet, columns_to_keep):
+def concat_files(output_file_name, file_name_list, filter_botnet, columns_to_keep, t_window):
     concat_df = pd.DataFrame()
 
     for file_name in file_name_list:
@@ -104,14 +104,14 @@ def concat_files(output_file_name, file_name_list, filter_botnet, columns_to_kee
             [concat_df, scenario[columns_to_keep]], ignore_index=True)
         del scenario
 
-    concat_df = features.generate_time_window_features(concat_df)
+    concat_df = features.generate_time_window_features(concat_df, t_window)
 
     if output_file_name:
         concat_df.to_csv(output_file_name, index=False)
     return concat_df
 
 
-def data_split_2format(training_file_name, test_file_name):
+def data_split_2format(training_file_name, test_file_name, t_window):
     print("Creating training file")
     training_df = concat_files(
         training_file_name,
@@ -119,6 +119,7 @@ def data_split_2format(training_file_name, test_file_name):
         # ["3_r.binetflow.2format"],
         True,
         TRAINING_COLUMNS,
+        t_window,
     )
 
     print("Creating test file")
@@ -128,6 +129,7 @@ def data_split_2format(training_file_name, test_file_name):
         # ["1_r.binetflow.2format"],
         False,
         TESTING_COLUMNS,
+        t_window,
     )
 
     return training_df, testing_df

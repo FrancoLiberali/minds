@@ -11,6 +11,9 @@ def generate_time_window_features(df, t_window=T_WINDOW):
         format="%Y/%m/%d %H:%M:%S.%f"
     )
 
+    if not t_window:
+        t_window = T_WINDOW
+
     first_index = 0
     last_index = 0
     w_start_time = df.iloc[first_index]['StartTimeDatetime']
