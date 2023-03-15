@@ -9,13 +9,13 @@ NOT_INTRUSION = 'N'
 NEW_COLUMN_HEADER = f"IMT_MINDS ({NOT_INTRUSION}:{INTRUSION})"
 
 
-def evaluate_model(model, test_cases_df, predictions_file):
+def evaluate_model(model, test_cases_df, predictions_file, intrusion_threshold=INTRUSION_THRESHOLD):
     test_cases = test_cases_df[common.MODEL_COLUMNS].to_numpy()
     # test_cases = test_cases[~np.isnan(test_cases).any(axis=1), :]
 
     predictions = model.predict(test_cases)
     predictions = [INTRUSION if prediction <=
-                   INTRUSION_THRESHOLD else NOT_INTRUSION for prediction in predictions]
+                   intrusion_threshold else NOT_INTRUSION for prediction in predictions]
 
     intrusion_amount = predictions.count(INTRUSION)
     print(f"Found {intrusion_amount} intrusions")
