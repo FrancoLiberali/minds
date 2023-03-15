@@ -26,17 +26,17 @@ def evaluate_model(model, test_cases_df, predictions_file, intrusion_threshold=I
     df[NEW_COLUMN_HEADER] = predictions
 
     # add columns required by BotnetDetectorsComparer but that are not really used
-    df['dur'] = df['runtime'] = df['proto'] = df['dir'] = df['state'] = df['sjit'] = df['djit'] = df['stos'] = df['dtos'] = df['pkts'] = df['bytes'] = df['trans'] = df['mean'] = df['stddev'] = df[
-        'rate'] = df['sintpkt'] = df['sintdist'] = df['sintpktact'] = df['sintdistact'] = df['sintpktidl'] = df['sintdistidl'] = df['dintpkt'] = df['dintdist'] = df['dintpktact'] = df['dintdistact'] = df['dintpktidl'] = df['dintdistidl'] = None
+    # df['dur'] = df['runtime'] = df['proto'] = df['dir'] = df['state'] = df['sjit'] = df['djit'] = df['stos'] = df['dtos'] = df['pkts'] = df['bytes'] = df['trans'] = df['mean'] = df['stddev'] = df[
+    #     'rate'] = df['sintpkt'] = df['sintdist'] = df['sintpktact'] = df['sintdistact'] = df['sintpktidl'] = df['sintdistidl'] = df['dintpkt'] = df['dintdist'] = df['dintpktact'] = df['dintdistact'] = df['dintpktidl'] = df['dintdistidl'] = None
 
-    df = df.rename(columns={'StartTime': '#stime',
-                            'SrcAddr': 'saddr', 'Sport': 'sport', 'DstAddr': 'daddr', 'Dport': 'dport'})
+    # df = df.rename(columns={'StartTime': '#stime',
+    #                         'SrcAddr': 'saddr', 'Sport': 'sport', 'DstAddr': 'daddr', 'Dport': 'dport'})
 
-    if predictions_file:
-        df.to_csv(predictions_file, index=False,
-                  columns=[
-                      '#stime', 'dur', 'runtime', 'proto', 'saddr', 'sport', 'dir', 'daddr', 'dport', 'state', 'sjit', 'djit', 'stos', 'dtos', 'pkts', 'bytes', 'trans', 'mean', 'stddev', 'rate', 'sintpkt', 'sintdist', 'sintpktact', 'sintdistact', 'sintpktidl', 'sintdistidl', 'dintpkt', 'dintdist', 'dintpktact', 'dintdistact', 'dintpktidl', 'dintdistidl', 'Label', NEW_COLUMN_HEADER,
-                  ])
+    # if predictions_file:
+    #     df.to_csv(predictions_file, index=False,
+    #               columns=[
+    #                   '#stime', 'dur', 'runtime', 'proto', 'saddr', 'sport', 'dir', 'daddr', 'dport', 'state', 'sjit', 'djit', 'stos', 'dtos', 'pkts', 'bytes', 'trans', 'mean', 'stddev', 'rate', 'sintpkt', 'sintdist', 'sintpktact', 'sintdistact', 'sintpktidl', 'sintdistidl', 'dintpkt', 'dintdist', 'dintpktact', 'dintdistact', 'dintpktidl', 'dintdistidl', 'Label', NEW_COLUMN_HEADER,
+    #               ])
 
     return df
 
